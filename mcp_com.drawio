@@ -1,0 +1,311 @@
+<mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    
+    <!-- Title -->
+    <mxCell id="mcp_title" value="MCP Communication Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="500" y="20" width="300" height="30" as="geometry"/>
+    </mxCell>
+    
+    <!-- MCP Protocol Stack -->
+    <mxCell id="protocol_stack" value="MCP Protocol Stack Architecture" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e0f2f1;strokeColor=#00695c;fontStyle=1;startSize=30;" vertex="1" parent="1">
+      <mxGeometry x="20" y="70" width="350" height="320" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="app_layer" value="Application Layer [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="protocol_stack">
+      <mxGeometry x="10" y="40" width="330" height="60" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="al1" value="Tool Invocation Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="app_layer">
+      <mxGeometry x="10" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="al2" value="Resource Access Controller" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="app_layer">
+      <mxGeometry x="90" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="al3" value="Context State Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="app_layer">
+      <mxGeometry x="170" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="al4" value="Capability Negotiator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="app_layer">
+      <mxGeometry x="250" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="protocol_layer" value="Protocol Layer [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="protocol_stack">
+      <mxGeometry x="10" y="110" width="330" height="60" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="pl1" value="JSON-RPC 2.0 Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="protocol_layer">
+      <mxGeometry x="10" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="pl2" value="Message Router" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="protocol_layer">
+      <mxGeometry x="90" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="pl3" value="Error Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="protocol_layer">
+      <mxGeometry x="170" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="pl4" value="Performance Monitor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="protocol_layer">
+      <mxGeometry x="250" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="transport_layer" value="Transport Layer [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="protocol_stack">
+      <mxGeometry x="10" y="180" width="330" height="60" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="tl1" value="WebSocket Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="transport_layer">
+      <mxGeometry x="10" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="tl2" value="HTTP/HTTPS Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="transport_layer">
+      <mxGeometry x="90" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="tl3" value="Local IPC Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="transport_layer">
+      <mxGeometry x="170" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="tl4" value="Connection Pool Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="transport_layer">
+      <mxGeometry x="250" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="security_layer" value="Security Layer [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="protocol_stack">
+      <mxGeometry x="10" y="250" width="330" height="60" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="sl1" value="Authentication Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="security_layer">
+      <mxGeometry x="10" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="sl2" value="Authorization Engine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="security_layer">
+      <mxGeometry x="90" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="sl3" value="Encryption Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="security_layer">
+      <mxGeometry x="170" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="sl4" value="Security Audit Logger" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;fontSize=10;" vertex="1" parent="security_layer">
+      <mxGeometry x="250" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <!-- MCP Client Ecosystem -->
+    <mxCell id="client_ecosystem" value="MCP Client Ecosystem [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1976d2;fontStyle=1;startSize=30;" vertex="1" parent="1">
+      <mxGeometry x="400" y="70" width="300" height="180" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="agent_clients" value="Agent MCP Clients" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="client_ecosystem">
+      <mxGeometry x="10" y="40" width="280" height="60" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="amc1" value="Test Generation Client" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" vertex="1" parent="agent_clients">
+      <mxGeometry x="10" y="30" width="60" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="amc2" value="Evidence Validation Client" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" vertex="1" parent="agent_clients">
+      <mxGeometry x="80" y="30" width="60" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="amc3" value="Knowledge Graph Client" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" vertex="1" parent="agent_clients">
+      <mxGeometry x="150" y="30" width="60" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="amc4" value="Analysis Client" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" vertex="1" parent="agent_clients">
+      <mxGeometry x="220" y="30" width="50" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="client_mgmt" value="Client Management Services" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="client_ecosystem">
+      <mxGeometry x="10" y="110" width="280" height="60" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="cms1" value="Client Registry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" vertex="1" parent="client_mgmt">
+      <mxGeometry x="10" y="30" width="60" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="cms2" value="Session Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" vertex="1" parent="client_mgmt">
+      <mxGeometry x="80" y="30" width="60" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="cms3" value="Load Balancer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" vertex="1" parent="client_mgmt">
+      <mxGeometry x="150" y="30" width="60" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="cms4" value="Health Monitor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" vertex="1" parent="client_mgmt">
+      <mxGeometry x="220" y="30" width="50" height="25" as="geometry"/>
+    </mxCell>
+    
+    <!-- MCP Server Infrastructure -->
+    <mxCell id="server_infra" value="MCP Server Infrastructure [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#f57c00;fontStyle=1;startSize=30;" vertex="1" parent="1">
+      <mxGeometry x="730" y="70" width="400" height="180" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="tool_servers" value="Tool Servers" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="server_infra">
+      <mxGeometry x="10" y="40" width="380" height="70" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="ts1" value="Code Analysis Server" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#F57C00;fontColor=#ffffff;fontSize=9;" vertex="1" parent="tool_servers">
+      <mxGeometry x="10" y="30" width="60" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="ts2" value="Test Framework Server" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#F57C00;fontColor=#ffffff;fontSize=9;" vertex="1" parent="tool_servers">
+      <mxGeometry x="80" y="30" width="60" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="ts3" value="Documentation Server" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#F57C00;fontColor=#ffffff;fontSize=9;" vertex="1" parent="tool_servers">
+      <mxGeometry x="150" y="30" width="60" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="ts4" value="Compliance Server" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#F57C00;fontColor=#ffffff;fontSize=9;" vertex="1" parent="tool_servers">
+      <mxGeometry x="220" y="30" width="60" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="ts5" value="Database Server" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#F57C00;fontColor=#ffffff;fontSize=9;" vertex="1" parent="tool_servers">
+      <mxGeometry x="290" y="30" width="60" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="server_mgmt" value="Server Management" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="server_infra">
+      <mxGeometry x="10" y="120" width="380" height="50" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="sm1" value="Tool Registry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#F57C00;fontColor=#ffffff;fontSize=10;" vertex="1" parent="server_mgmt">
+      <mxGeometry x="10" y="25" width="80" height="20" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="sm2" value="Resource Provider" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#F57C00;fontColor=#ffffff;fontSize=10;" vertex="1" parent="server_mgmt">
+      <mxGeometry x="100" y="25" width="80" height="20" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="sm3" value="Capability Matcher" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#F57C00;fontColor=#ffffff;fontSize=10;" vertex="1" parent="server_mgmt">
+      <mxGeometry x="190" y="25" width="80" height="20" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="sm4" value="Performance Optimizer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#F57C00;fontColor=#ffffff;fontSize=10;" vertex="1" parent="server_mgmt">
+      <mxGeometry x="280" y="25" width="90" height="20" as="geometry"/>
+    </mxCell>
+    
+    <!-- LLM Integration Gateway -->
+    <mxCell id="llm_gateway" value="LLM Integration Gateway [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#7b1fa2;fontStyle=1;startSize=30;" vertex="1" parent="1">
+      <mxGeometry x="400" y="280" width="730" height="110" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="llm_connectors" value="LLM Service Connectors" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="llm_gateway">
+      <mxGeometry x="10" y="40" width="360" height="60" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="lsc1" value="OpenAI GPT-4 Connector" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9C27B0;strokeColor=#7B1FA2;fontColor=#ffffff;fontSize=10;" vertex="1" parent="llm_connectors">
+      <mxGeometry x="10" y="30" width="80" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="lsc2" value="Claude API Connector" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9C27B0;strokeColor=#7B1FA2;fontColor=#ffffff;fontSize=10;" vertex="1" parent="llm_connectors">
+      <mxGeometry x="100" y="30" width="80" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="lsc3" value="Local Model Connector" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9C27B0;strokeColor=#7B1FA2;fontColor=#ffffff;fontSize=10;" vertex="1" parent="llm_connectors">
+      <mxGeometry x="190" y="30" width="80" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="lsc4" value="Multi-Model Router" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9C27B0;strokeColor=#7B1FA2;fontColor=#ffffff;fontSize=10;" vertex="1" parent="llm_connectors">
+      <mxGeometry x="280" y="30" width="70" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="llm_mgmt" value="LLM Management Services" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="llm_gateway">
+      <mxGeometry x="380" y="40" width="340" height="60" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="lms1" value="Request Optimizer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9C27B0;strokeColor=#7B1FA2;fontColor=#ffffff;fontSize=10;" vertex="1" parent="llm_mgmt">
+      <mxGeometry x="10" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="lms2" value="Response Parser" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9C27B0;strokeColor=#7B1FA2;fontColor=#ffffff;fontSize=10;" vertex="1" parent="llm_mgmt">
+      <mxGeometry x="95" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="lms3" value="Context Injector" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9C27B0;strokeColor=#7B1FA2;fontColor=#ffffff;fontSize=10;" vertex="1" parent="llm_mgmt">
+      <mxGeometry x="180" y="30" width="75" height="25" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="lms4" value="Quality Assessor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9C27B0;strokeColor=#7B1FA2;fontColor=#ffffff;fontSize=10;" vertex="1" parent="llm_mgmt">
+      <mxGeometry x="265" y="30" width="65" height="25" as="geometry"/>
+    </mxCell>
+    
+    <!-- Communication Examples -->
+    <mxCell id="comm_examples" value="MCP Communication Examples &amp; Patterns" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#2e7d32;fontStyle=1;startSize=30;" vertex="1" parent="1">
+      <mxGeometry x="20" y="420" width="1110" height="200" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="tool_discovery" value="Tool Discovery Pattern" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="comm_examples">
+      <mxGeometry x="10" y="40" width="350" height="150" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="tdp1" value="📋 Tool List Request:&#xa;{&#xa;  'jsonrpc': '2.0',&#xa;  'method': 'tools/list',&#xa;  'params': {&#xa;    'context': 'test_generation',&#xa;    'capabilities': ['code_analysis', 'test_creation']&#xa;  },&#xa;  'id': 'req_001'&#xa;}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E8;strokeColor=#2E7D32;fontSize=8;align=left;" vertex="1" parent="tool_discovery">
+      <mxGeometry x="10" y="30" width="330" height="110" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="tool_invocation" value="Tool Invocation Pattern" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="comm_examples">
+      <mxGeometry x="370" y="40" width="350" height="150" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="tip1" value="🔧 Tool Call Request:&#xa;{&#xa;  'jsonrpc': '2.0',&#xa;  'method': 'tools/call',&#xa;  'params': {&#xa;    'name': 'analyze_code_complexity',&#xa;    'arguments': {&#xa;      'repository_url': 'github.com/org/repo',&#xa;      'file_path': 'src/payment/service.py'&#xa;    }&#xa;  },&#xa;  'id': 'req_002'&#xa;}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E8;strokeColor=#2E7D32;fontSize=8;align=left;" vertex="1" parent="tool_invocation">
+      <mxGeometry x="10" y="30" width="330" height="110" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="context_mgmt" value="Context Management Pattern" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=1;startSize=25;" vertex="1" parent="comm_examples">
+      <mxGeometry x="730" y="40" width="370" height="150" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="cmp1" value="📝 Context Update:&#xa;{&#xa;  'jsonrpc': '2.0',&#xa;  'method': 'context/update',&#xa;  'params': {&#xa;    'session_id': 'session_123',&#xa;    'context_data': {&#xa;      'current_task': 'evidence_validation',&#xa;      'change_id': 'CHG-2024-001',&#xa;      'compliance_frameworks': ['SOX', 'SOC2']&#xa;    }&#xa;  },&#xa;  'id': 'req_003'&#xa;}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E8;strokeColor=#2E7D32;fontSize=8;align=left;" vertex="1" parent="context_mgmt">
+      <mxGeometry x="10" y="30" width="350" height="110" as="geometry"/>
+    </mxCell>
+    
+    <!-- Performance Metrics -->
+    <mxCell id="perf_metrics" value="📊 Real-Time Performance:&#xa;• Average Request Latency: 85ms&#xa;• Concurrent Connections: 450&#xa;• Tool Discovery Rate: 15/sec&#xa;• Tool Invocation Rate: 120/sec&#xa;• Context Update Rate: 30/sec&#xa;• Error Rate: 0.3%&#xa;• Connection Uptime: 99.7%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00695C;fontSize=10;align=left;" vertex="1" parent="1">
+      <mxGeometry x="20" y="650" width="250" height="120" as="geometry"/>
+    </mxCell>
+    
+    <!-- Security Features -->
+    <mxCell id="security_features" value="🔐 Security Implementation:&#xa;• OAuth 2.0 + JWT Authentication&#xa;• Role-Based Access Control (RBAC)&#xa;• End-to-End TLS 1.3 Encryption&#xa;• Request/Response Audit Logging&#xa;• Rate Limiting: 1000 req/min/client&#xa;• API Key Rotation: Every 90 days&#xa;• Intrusion Detection: ML-based" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#00695C;fontSize=10;align=left;" vertex="1" parent="1">
+      <mxGeometry x="300" y="650" width="250" height="120" as="geometry"/>
+    </mxCell>
+    
+    <!-- Main Connections -->
+    <mxCell id="mcp_flow1" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#50E3C2;strokeWidth=2;" edge="1" parent="1" source="al2" target="pl2">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <mxPoint x="400" y="300" as="sourcePoint"/>
+        <mxPoint x="450" y="250" as="targetPoint"/>
+      </mxGeometry>
+    </mxCell>
+    
+    <mxCell id="mcp_flow2" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#50E3C2;strokeWidth=2;" edge="1" parent="1" source="pl2" target="tl2">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <mxPoint x="400" y="300" as="sourcePoint"/>
+        <mxPoint x="450" y="250" as="targetPoint"/>
+      </mxGeometry>
+    </mxCell>
+    
+    <mxCell id="mcp_flow3" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#50E3C2;strokeWidth=2;" edge="1" parent="1" source="tl2" target="sl2">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <mxPoint x="400" y="300" as="sourcePoint"/>
+        <mxPoint x="450" y="250" as="targetPoint"/>
+      </mxGeometry>
+    </mxCell>
+    
+    <mxCell id="mcp_flow4" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#4A90E2;strokeWidth=2;" edge="1" parent="1" source="amc1" target="ts2">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <mxPoint x="400" y="300" as="sourcePoint"/>
+        <mxPoint x="450" y="250" as="targetPoint"/>
+      </mxGeometry>
+    </mxCell>
+    
+    <mxCell id="mcp_flow5" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#9C27B0;strokeWidth=2;" edge="1" parent="1" source="sm1" target="lsc1">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <mxPoint x="400" y="300" as="sourcePoint"/>
+        <mxPoint x="450" y="250" as="targetPoint"/>
+      </mxGeometry>
+    </mxCell>
+    
+  </root>
+</mxGraphModel>

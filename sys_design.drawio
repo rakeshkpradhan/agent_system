@@ -1,0 +1,235 @@
+<mxfile host="65bd71144e">
+    <diagram id="y6rL2AoPoSFuauDsIYIS" name="Page-1">
+        <mxGraphModel dx="1001" dy="580" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="AI Testing &amp; Compliance Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="20" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="upstream_group" value="Upstream Systems [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#6c757d;fontStyle=1;startSize=30;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="70" width="200" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="us1" value="CI/CD Pipelines&lt;br&gt;🚀 Jenkins" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="upstream_group" vertex="1">
+                    <mxGeometry x="10" y="40" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="us2" value="Change Management&lt;br&gt;📋 ServiceNow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="upstream_group" vertex="1">
+                    <mxGeometry x="10" y="90" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="us3" value="Code Repositories&#xa;💻 Git, GitHub, Bitbucket" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="upstream_group" vertex="1">
+                    <mxGeometry x="10" y="140" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="us4" value="Issue Tracking&#xa;🎯 Jira, Azure Boards" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="upstream_group" vertex="1">
+                    <mxGeometry x="10" y="190" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="us5" value="Documentation Systems&#xa;📚 Confluence, SharePoint" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="upstream_group" vertex="1">
+                    <mxGeometry x="10" y="240" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="entry_group" value="System Entry Layer [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#6c757d;fontStyle=1;startSize=30;" parent="1" vertex="1">
+                    <mxGeometry x="250" y="70" width="200" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="sl1" value="Pipeline Integration Gateway&#xa;🔌 Webhook Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="entry_group" vertex="1">
+                    <mxGeometry x="10" y="40" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="sl2" value="Change Management Interface&#xa;📥 Event Listener" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="entry_group" vertex="1">
+                    <mxGeometry x="10" y="90" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="sl3" value="User Interface Dashboard&#xa;🌐 React Web App" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="entry_group" vertex="1">
+                    <mxGeometry x="10" y="140" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="orchestration_group" value="AI Agent Orchestration Hub [AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1976d2;fontStyle=1;startSize=30;" parent="1" vertex="1">
+                    <mxGeometry x="510" y="120" width="220" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="aoh1" value="Master Orchestrator Agent&#xa;🎯 Central Coordination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;" parent="orchestration_group" vertex="1">
+                    <mxGeometry x="10" y="40" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="aoh2" value="Task Distribution Agent&#xa;⚖️ Load Balancing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;" parent="orchestration_group" vertex="1">
+                    <mxGeometry x="10" y="90" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="aoh3" value="Resource Management Agent&#xa;📊 Capacity Planning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;" parent="orchestration_group" vertex="1">
+                    <mxGeometry x="10" y="140" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="kg_group" value="Knowledge Graph Intelligence Core [AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#f57c00;fontStyle=1;startSize=30;" parent="1" vertex="1">
+                    <mxGeometry x="380" y="380" width="320" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="kgc1" value="Neo4j Knowledge Graph&#xa;🧠 Central Intelligence" style="ellipse;whiteSpace=wrap;html=1;fillColor=#F5A623;strokeColor=#C7851B;fontColor=#ffffff;fontStyle=1;" parent="kg_group" vertex="1">
+                    <mxGeometry x="110" y="40" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="kgp_group" value="KG Construction Pipeline" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=0;startSize=20;" parent="kg_group" vertex="1">
+                    <mxGeometry x="10" y="130" width="140" height="60" as="geometry">
+                        <mxRectangle x="10" y="130" width="170" height="30" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="kgc2" value="Data Ingestion Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" parent="kgp_group" vertex="1">
+                    <mxGeometry x="10" y="25" width="120" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="kgq_group" value="KG Query &amp;amp; Reasoning" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=0;startSize=20;" parent="kg_group" vertex="1">
+                    <mxGeometry x="170" y="130" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="kgq1" value="Query Processing Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" parent="kgq_group" vertex="1">
+                    <mxGeometry x="10" y="25" width="120" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="test_group" value="Test Generation Multi-Agent System [AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#2e7d32;fontStyle=1;startSize=30;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="420" width="280" height="200" as="geometry">
+                        <mxRectangle x="40" y="420" width="250" height="30" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="tgs1" value="Code Analysis Agent&#xa;🔬 Static Analysis &amp; Parsing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;" parent="test_group" vertex="1">
+                    <mxGeometry x="10" y="40" width="260" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="tgs2" value="Test Gap Discovery Agent&#xa;🕳️ Coverage Analysis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;" parent="test_group" vertex="1">
+                    <mxGeometry x="10" y="85" width="260" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="stg_group" value="Specialized Test Generators [AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=0;startSize=20;" parent="test_group" vertex="1">
+                    <mxGeometry x="10" y="130" width="260" height="60" as="geometry">
+                        <mxRectangle x="10" y="130" width="210" height="30" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="stg1" value="Regresion Test Generation Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" parent="stg_group" vertex="1">
+                    <mxGeometry x="5" y="25" width="120" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="stg2" value="Performance Test Generation Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" parent="stg_group" vertex="1">
+                    <mxGeometry x="135" y="25" width="120" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="evidence_group" value="Evidence Validation Multi-Agent System [AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c2185b;fontStyle=1;startSize=30;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="420" width="280" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="evs1" value="Evidence Collection Orchestrator&#xa;📥 Multi-Source Coordination" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;" parent="evidence_group" vertex="1">
+                    <mxGeometry x="10" y="40" width="260" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="eca_group" value="Evidence Collection Agents [AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=0;startSize=20;" parent="evidence_group" vertex="1">
+                    <mxGeometry x="10" y="85" width="260" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="eca1" value="Jira Evidence Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" parent="eca_group" vertex="1">
+                    <mxGeometry x="5" y="25" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="eca2" value="Confluence Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" parent="eca_group" vertex="1">
+                    <mxGeometry x="90" y="25" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="eca3" value="Pipeline Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" parent="eca_group" vertex="1">
+                    <mxGeometry x="175" y="25" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="vca_group" value="Validation &amp; Compliance Agents [AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontStyle=0;startSize=20;" parent="evidence_group" vertex="1">
+                    <mxGeometry x="10" y="145" width="260" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="vca1" value="Policy Compliance Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" parent="vca_group" vertex="1">
+                    <mxGeometry x="5" y="25" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="vca2" value="Gap Analysis Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" parent="vca_group" vertex="1">
+                    <mxGeometry x="135" y="25" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="mcp_group" value="MCP Communication Infrastructure [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e0f2f1;strokeColor=#00695c;fontStyle=1;startSize=30;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="750" width="200" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="mcpi1" value="MCP Client Manager&#xa;📱 Connection Handling" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;" parent="mcp_group" vertex="1">
+                    <mxGeometry x="10" y="40" width="180" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="mcpi2" value="Tool Registry Service&#xa;🛠️ Capability Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;" parent="mcp_group" vertex="1">
+                    <mxGeometry x="10" y="85" width="180" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="mcpi3" value="Protocol Handler&#xa;📡 Message Processing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#50E3C2;strokeColor=#3BC7A3;fontColor=#ffffff;" parent="mcp_group" vertex="1">
+                    <mxGeometry x="10" y="130" width="180" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="hitl_group" value="Human-in-the-Loop Interface [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#7b1fa2;fontStyle=1;startSize=30;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="750" width="280" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="hitl1" value="Review &amp; Approval Dashboard&#xa;👥 Human Oversight" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="hitl_group" vertex="1">
+                    <mxGeometry x="10" y="40" width="260" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="hitl2" value="Feedback Collection System&#xa;📝 Continuous Improvement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="hitl_group" vertex="1">
+                    <mxGeometry x="10" y="80" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="downstream_group" value="Downstream Integration Layer [Non-AI]" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#6c757d;fontStyle=1;startSize=30;" parent="1" vertex="1">
+                    <mxGeometry x="440" y="750" width="200" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="ds1" value="Test Repository Management&#xa;📂 Git Integration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="downstream_group" vertex="1">
+                    <mxGeometry x="10" y="40" width="180" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="ds2" value="Compliance Reporting System&#xa;📊 GRC Dashboards" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="downstream_group" vertex="1">
+                    <mxGeometry x="10" y="85" width="180" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="ds3" value="Quality Gate Integration&#xa;🚪 Release Control" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;" parent="downstream_group" vertex="1">
+                    <mxGeometry x="10" y="130" width="180" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="conn1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#FF5722;strokeWidth=2;" parent="1" source="us1" target="sl1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="400" as="sourcePoint"/>
+                        <mxPoint x="450" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#FF5722;strokeWidth=2;" parent="1" source="us2" target="sl2" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="400" as="sourcePoint"/>
+                        <mxPoint x="450" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#2196F3;strokeWidth=2;" parent="1" source="sl1" target="aoh1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="400" as="sourcePoint"/>
+                        <mxPoint x="450" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn4" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#4CAF50;strokeWidth=2;" parent="1" source="aoh1" target="kgc1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="400" as="sourcePoint"/>
+                        <mxPoint x="450" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn5" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#9C27B0;strokeWidth=2;" parent="1" source="aoh2" target="tgs1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="400" as="sourcePoint"/>
+                        <mxPoint x="450" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn6" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#FF9800;strokeWidth=2;" parent="1" source="aoh2" target="evs1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="400" as="sourcePoint"/>
+                        <mxPoint x="450" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn7" value="Query: Code Structure&#xa;Update: Analysis Results" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;strokeColor=#F5A623;strokeWidth=2;" parent="1" source="tgs1" target="kgc1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="400" as="sourcePoint"/>
+                        <mxPoint x="450" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn8" value="Query: Evidence Requirements&#xa;Update: Validation Status" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;strokeColor=#F5A623;strokeWidth=2;" parent="1" source="evs1" target="kgc1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="400" as="sourcePoint"/>
+                        <mxPoint x="450" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn9" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#795548;strokeWidth=2;" parent="1" source="tgs2" target="hitl1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="400" as="sourcePoint"/>
+                        <mxPoint x="450" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn10" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#607D8B;strokeWidth=2;" parent="1" source="hitl1" target="ds1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="400" as="sourcePoint"/>
+                        <mxPoint x="450" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="conn11" value="Feedback" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#795548;strokeWidth=1;dashed=1;" parent="1" source="hitl2" target="kgc1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="400" as="sourcePoint"/>
+                        <mxPoint x="450" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="legend_group" value="Legend" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;startSize=25;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="70" width="150" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend_ai" value="AI Components" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A90E2;strokeColor=#2E5C8A;fontColor=#ffffff;fontSize=10;" parent="legend_group" vertex="1">
+                    <mxGeometry x="10" y="30" width="130" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend_nonai" value="Non-AI Components" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9B9B9B;strokeColor=#6B6B6B;fontColor=#ffffff;fontSize=10;" parent="legend_group" vertex="1">
+                    <mxGeometry x="10" y="55" width="130" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend_kg" value="Knowledge Graph" style="ellipse;whiteSpace=wrap;html=1;fillColor=#F5A623;strokeColor=#C7851B;fontColor=#ffffff;fontSize=10;" parent="legend_group" vertex="1">
+                    <mxGeometry x="10" y="80" width="130" height="25" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
