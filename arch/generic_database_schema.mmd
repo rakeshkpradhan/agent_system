@@ -1,0 +1,137 @@
+erDiagram
+    COMPLIANCE_POLICY_CATALOG {
+        string policy_id PK
+        string policy_number
+        string policy_name
+        string policy_category
+        string description
+        string version
+        json policy_metadata
+        string status
+        datetime effective_date
+        datetime created_at
+        datetime updated_at
+    }
+
+    GENERIC_COMPLIANCE_RULE {
+        string rule_id PK
+        string policy_id FK
+        string rule_number
+        string rule_name
+        string rule_category
+        text description
+        json validation_criteria
+        string severity_level
+        json rule_parameters
+        string rule_type
+        datetime created_at
+    }
+
+    POLICY_RULE_HIERARCHY {
+        string id PK
+        string parent_rule_id FK
+        string child_rule_id FK
+        string relationship_type
+        json dependency_metadata
+        datetime created_at
+    }
+
+    EVIDENCE_TYPE_MAPPING {
+        string id PK
+        string policy_id FK
+        string evidence_type
+        string evidence_category
+        json required_attributes
+        json validation_patterns
+        boolean mandatory
+        string extraction_method
+    }
+
+    CROSS_POLICY_REFERENCES {
+        string id PK
+        string source_policy_id FK
+        string target_policy_id FK
+        string reference_type
+        json reference_metadata
+        string impact_level
+    }
+
+    GENERIC_VALIDATION_CRITERIA {
+        string criteria_id PK
+        string rule_id FK
+        string criteria_name
+        text criteria_description
+        json validation_logic
+        string validation_method
+        float threshold_value
+        json expected_patterns
+    }
+
+    MULTI_DOMAIN_EVIDENCE_EMBEDDINGS {
+        int id PK
+        text evidence_text
+        string evidence_type
+        string policy_context
+        string domain_category
+        string compliance_outcome
+        vector embedding
+        json evidence_metadata
+        json policy_mappings
+        string source_url
+        datetime created_at
+    }
+
+    GENERIC_VALIDATION_HISTORY {
+        string validation_id PK
+        string change_request_id
+        string policy_id FK
+        string evidence_url
+        string validation_status
+        json policy_results
+        json rule_assessments
+        json evidence_analysis
+        float overall_confidence
+        json agent_execution_trace
+        json recommendations
+        datetime validated_at
+        datetime completed_at
+    }
+
+    POLICY_EVIDENCE_PATTERNS {
+        string pattern_id PK
+        string policy_id FK
+        string pattern_name
+        text pattern_description
+        json pattern_template
+        json matching_criteria
+        float success_rate
+        json usage_statistics
+        datetime created_at
+    }
+
+    COMPLIANCE_ASSESSMENT_TEMPLATES {
+        string template_id PK
+        string policy_id FK
+        string template_name
+        text prompt_template
+        json assessment_criteria
+        json output_format
+        string llm_parameters
+        datetime created_at
+    }
+
+    %% Relationships - Spanner Graph Structure
+    COMPLIANCE_POLICY_CATALOG ||--o{ GENERIC_COMPLIANCE_RULE : "contains"
+    GENERIC_COMPLIANCE_RULE ||--o{ POLICY_RULE_HIERARCHY : "parent_rule"
+    GENERIC_COMPLIANCE_RULE ||--o{ POLICY_RULE_HIERARCHY : "child_rule"
+    COMPLIANCE_POLICY_CATALOG ||--o{ EVIDENCE_TYPE_MAPPING : "defines_evidence_types"
+    COMPLIANCE_POLICY_CATALOG ||--o{ CROSS_POLICY_REFERENCES : "source_policy"
+    COMPLIANCE_POLICY_CATALOG ||--o{ CROSS_POLICY_REFERENCES : "target_policy"
+    GENERIC_COMPLIANCE_RULE ||--o{ GENERIC_VALIDATION_CRITERIA : "has_criteria"
+    COMPLIANCE_POLICY_CATALOG ||--o{ POLICY_EVIDENCE_PATTERNS : "defines_patterns"
+    COMPLIANCE_POLICY_CATALOG ||--o{ COMPLIANCE_ASSESSMENT_TEMPLATES : "has_templates"
+
+    %% Relationships - AlloyDB Vector Store
+    MULTI_DOMAIN_EVIDENCE_EMBEDDINGS }o--|| COMPLIANCE_POLICY_CATALOG : "belongs_to_policy"
+    GENERIC_VALIDATION_HISTORY }o--|| COMPLIANCE_POLICY_CATALOG : "validates_against"
+    GENERIC_VALIDATION_HISTORY }o--o{ MULTI_DOMAIN_EVIDENCE_EMBEDDINGS : "analyzes"

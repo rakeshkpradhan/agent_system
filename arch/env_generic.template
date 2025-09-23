@@ -1,0 +1,34 @@
+# Generic Multi-Policy Compliance Validation System Configuration
+
+# Google Cloud Configuration
+GOOGLE_CLOUD_PROJECT=your-project-id
+GOOGLE_APPLICATION_CREDENTIALS=path/to/service-account.json
+VERTEX_AI_LOCATION=us-central1
+
+# Spanner Graph Configuration - Universal Policy Store
+SPANNER_INSTANCE_ID=generic-compliance-instance
+SPANNER_DATABASE_ID=universal-compliance-db
+
+# AlloyDB Configuration - Multi-Domain Vector Store
+ALLOYDB_INSTANCE=projects/PROJECT/locations/REGION/clusters/CLUSTER/instances/INSTANCE
+ALLOYDB_DATABASE=generic_compliance_db
+ALLOYDB_USER=postgres
+ALLOYDB_PASSWORD=your-secure-password
+
+# API Configuration
+PORT=8080
+FLASK_ENV=production
+
+# Generic Validation Configuration
+SIMILARITY_THRESHOLD=0.75
+MAX_RETRIEVED_EXAMPLES=15
+CONFIDENCE_THRESHOLD=0.8
+
+# Multi-Policy Features
+AUTO_POLICY_DETECTION=true
+MULTI_POLICY_SUPPORT=true
+CROSS_POLICY_VALIDATION=true
+MAX_EVIDENCE_LENGTH=25000
+
+# Supported Evidence Formats
+SUPPORTED_EVIDENCE_FORMATS=confluence,html,markdown,pdf,docx,txt,json,xml

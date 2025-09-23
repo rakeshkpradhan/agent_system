@@ -1,0 +1,75 @@
+sequenceDiagram
+    participant CMS as Change Management System
+    participant WFC as Generic Workflow Controller
+    participant ESA as Evidence Summarizer Agent
+    participant PDA as Policy Discovery Agent
+    participant CRA as Compliance Retrieval Agent
+    participant GEA as Generic Evaluation Agent
+    participant CONF as Confluence Repository
+    participant SG as Spanner Graph (Multi-Policy)
+    participant ADB as AlloyDB Vector Store
+    participant EMB as Vertex AI Embeddings
+    participant GEMINI as Gemini 2.5 Pro
+
+    Note over CMS, GEMINI: Generic Multi-Policy Compliance Validation System
+
+    CMS->>WFC: Trigger validation (Policy ID + Evidence URL)
+    Note over WFC: Initialize Generic ValidationState<br/>Policy Context: Dynamic
+
+    WFC->>ESA: Parse evidence content
+    ESA->>CONF: Extract multi-format evidence
+    CONF-->>ESA: Raw evidence data
+
+    Note over ESA: Universal Content Analysis
+    ESA->>ESA: Parse documentation structure
+    ESA->>ESA: Extract key components
+    ESA->>ESA: Classify evidence types
+    ESA->>ESA: Generate content summary
+
+    ESA->>EMB: Generate domain-agnostic embeddings
+    EMB-->>ESA: Evidence vectors
+    ESA->>WFC: Evidence analysis + embeddings
+
+    WFC->>PDA: Discover applicable policies
+
+    Note over PDA: Dynamic Policy Discovery
+    PDA->>SG: Query policy catalog
+    Note over SG: Multi-Policy Store<br/>Policy 101: Test Execution<br/>Policy 201: Security<br/>Policy 301: Deployment<br/>Policy 401: Code Review<br/>...Dynamic Policies
+    SG-->>PDA: Applicable policies + rules
+
+    PDA->>PDA: Identify policy context
+    PDA->>PDA: Load policy-specific rules
+    PDA->>WFC: Policy rules + validation criteria
+
+    WFC->>CRA: Build compliance context
+
+    par Hybrid Retrieval Strategy
+        CRA->>SG: Query policy-specific rules
+        Note over SG: Dynamic Rule Retrieval<br/>Policy-Specific Validation<br/>Cross-Policy References
+        SG-->>CRA: Structured compliance rules
+    and
+        CRA->>ADB: Multi-domain vector search
+        Note over ADB: Historical Evidence<br/>Similar Cases<br/>Domain Patterns<br/>Policy Examples
+        ADB-->>CRA: Similar evidence patterns
+    end
+
+    CRA->>WFC: Hybrid compliance context
+
+    WFC->>GEA: Execute generic evaluation
+
+    Note over GEA: Policy-Agnostic Assessment
+    GEA->>GEA: Build policy-aware RAG context
+    GEA->>GEA: Generate dynamic evaluation criteria
+    GEA->>GEA: Create compliance assessment prompt
+
+    GEA->>GEMINI: Policy-specific compliance query
+    Note over GEMINI: Dynamic Rule Analysis<br/>Evidence Mapping<br/>Policy-Specific Reasoning<br/>Cross-Rule Dependencies
+    GEMINI-->>GEA: Compliance assessment
+
+    GEA->>GEA: Parse policy-specific results
+    GEA->>GEA: Generate recommendations
+    GEA->>WFC: Generic compliance decision
+
+    WFC->>CMS: Multi-policy validation results
+
+    Note over CMS: COMPLIANT/NON_COMPLIANT<br/>+ Policy-Specific Analysis<br/>+ Evidence Mappings<br/>+ Remediation Plan
