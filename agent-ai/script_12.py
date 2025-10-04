@@ -1,0 +1,42 @@
+# Create requirements.txt and setup files
+requirements_code = '''# Core framework dependencies
+flask==3.0.3
+gunicorn==21.2.0
+requests==2.31.0
+
+# HTML parsing and content extraction
+beautifulsoup4==4.12.2
+trafilatura==1.6.4
+lxml==4.9.3
+
+# Google Cloud Platform dependencies
+google-cloud-secretmanager==2.18.4
+google-cloud-spanner==3.44.0
+google-generativeai==0.4.0
+google-auth==2.23.4
+google-cloud-aiplatform==1.38.1
+
+# LangChain and LangGraph dependencies
+langchain-core==0.1.40
+langchain-google-spanner==0.2.2
+langchain-google-vertexai==1.0.3
+langgraph==0.0.55
+
+# Data processing and utilities
+pydantic==2.5.3
+python-dotenv==1.0.0
+typing-extensions==4.8.0
+dataclasses==0.6
+
+# Development and testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.11.0
+isort==5.12.0
+flake8==6.1.0
+'''
+
+with open("requirements.txt", "w") as f:
+    f.write(requirements_code)
+
+print("✅ Created requirements.txt with all dependencies")
