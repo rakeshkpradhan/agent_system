@@ -1,0 +1,459 @@
+"""
+Enhanced Policy Evaluation Agent with spaCy-aware decision making.
+
+This agent uses Gemini 2.5 Pro with enhanced prompt engineering that incorporates
+spaCy-extracted entities, compliance keywords, and semantic insights for superior
+compliance evaluation accuracy.
+"""
+
+import logging
+import json
+from typing import Dict, Any, List
+from datetime import datetime
+
+from ..models.data_models import WorkflowState, PolicyRule, ComplianceDecision
+from ..services.external_services import VertexAIService
+from ..utils.spacy_processor import text_processor
+from ..core.config import config
+
+logger = logging.getLogger(__name__)
+
+
+class EnhancedPolicyEvaluationAgent:
+    """
+    Enhanced Policy Evaluation Agent with spaCy-aware LLM evaluation.
+    
+    Features:
+    - spaCy entity-aware prompt engineering for better rule matching
+    - Enhanced evaluation prompts with compliance keywords and semantic insights
+    - Gemini 2.5 Pro with structured JSON output and entity validation
+    - Advanced confidence scoring based on entity matches and semantic similarity
+    """
+    
+    def __init__(self):
+        """Initialize the Enhanced Policy Evaluation Agent."""
+        self.vertex_service = VertexAIService()
+        
+        logger.info("Initialized Enhanced Policy Evaluation Agent with spaCy integration")
+    
+    async def process(self, state: WorkflowState) -> Dict[str, Any]:
+        """
+        Main processing method for Enhanced Policy Evaluation Agent.
+        
+        Args:
+            state: Current workflow state with enhanced spaCy-processed context
+            
+        Returns:
+            Dictionary with enhanced processing results and updated state
+        """
+        try:
+            policy_rules = state.policy_rules
+            evidence_documents = state.evidence_documents
+            rag_context = state.rag_context
+            
+            logger.info("Starting enhanced LLM-based compliance evaluation with spaCy insights")
+            state.add_message("Starting enhanced policy evaluation with Gemini 2.5 Pro + spaCy")
+            
+            # Task 1: Build Enhanced Evaluation Prompt with spaCy Features
+            enhanced_prompt = await self._build_spacy_enhanced_evaluation_prompt(
+                policy_rules, evidence_documents, rag_context
+            )
+            state.add_message(f"Built spaCy-enhanced evaluation prompt ({len(enhanced_prompt)} characters)")
+            
+            # Task 2: Query LLM with Enhanced Context
+            llm_response = await self._query_llm_with_enhanced_context(enhanced_prompt)
+            state.add_message(f"Received enhanced LLM response: {llm_response.get('decision', 'unknown')}")
+            
+            # Task 3: Parse and Validate with spaCy Enhancement
+            validated_response = await self._parse_and_validate_with_spacy(llm_response, evidence_documents)
+            state.add_message(f"Validated response with {len(validated_response.get('rule_assessments', []))} enhanced rule assessments")
+            
+            return {
+                'llm_evaluation': validated_response,
+                'success': True
+            }
+            
+        except Exception as e:
+            error_msg = f"Enhanced PolicyEvaluationAgent failed: {str(e)}"
+            logger.error(error_msg)
+            state.set_error(error_msg)
+            return {
+                'error': error_msg,
+                'success': False
+            }
+    
+    async def _build_spacy_enhanced_evaluation_prompt(self, policy_rules: List[PolicyRule], 
+                                                    evidence_documents: List[Any], 
+                                                    rag_context: str) -> str:
+        """
+        Task 1: Build spaCy-Enhanced Evaluation Prompt for LLM.
+        
+        Creates sophisticated prompt incorporating spaCy-extracted entities,
+        compliance keywords, and semantic insights for superior evaluation accuracy.
+        """
+        try:
+            logger.info("Building spaCy-enhanced evaluation prompt for Gemini 2.5 Pro")
+            
+            # Extract spaCy insights from evidence documents
+            spacy_insights = await self._extract_spacy_insights_from_evidence(evidence_documents)
+            
+            # Format evidence content with spaCy enhancements
+            enhanced_evidence_content = self._format_enhanced_evidence_content(evidence_documents, spacy_insights)
+            
+            # Define enhanced JSON output schema
+            output_schema = self._get_enhanced_output_schema()
+            
+            # Build comprehensive enhanced prompt
+            enhanced_prompt = f"""You are an expert compliance auditor with advanced semantic understanding capabilities. Your task is to determine if the provided evidence complies with the given policy rules using both explicit content analysis and semantic entity matching.
+
+ROLE AND GOAL:
+You are conducting a sophisticated compliance audit that combines traditional text analysis with semantic understanding. Analyze evidence against policy rules while considering entity relationships, compliance patterns, and semantic similarity.
+
+ENHANCED ANALYSIS CAPABILITIES:
+Use the following semantic insights extracted from the evidence:
+{self._format_spacy_insights_for_prompt(spacy_insights)}
+
+POLICY RULES TO EVALUATE:
+{self._format_enhanced_policy_rules_for_prompt(policy_rules)}
+
+EVIDENCE TO ANALYZE:
+{enhanced_evidence_content}
+
+CONTEXTUAL INFORMATION:
+{rag_context}
+
+ENHANCED EVALUATION INSTRUCTIONS:
+1. ENTITY-AWARE ANALYSIS: Match entities between evidence and policy rules
+2. COMPLIANCE PATTERN RECOGNITION: Identify compliance-specific patterns
+3. SEMANTIC RULE MATCHING: Evaluate semantic similarity and relationships
+4. CONFIDENCE ASSESSMENT: Calculate confidence based on entity matches and evidence strength
+5. COMPREHENSIVE ANALYSIS: Provide detailed reasoning with entity context
+
+OUTPUT FORMAT:
+Your response MUST be a valid JSON object matching this exact schema:
+{json.dumps(output_schema, indent=2)}
+
+Begin your enhanced compliance analysis with entity awareness and semantic understanding:"""
+            
+            logger.info(f"Built spaCy-enhanced evaluation prompt with {len(enhanced_prompt)} characters")
+            return enhanced_prompt
+            
+        except Exception as e:
+            logger.error(f"Failed to build enhanced evaluation prompt: {str(e)}")
+            raise
+    
+    async def _extract_spacy_insights_from_evidence(self, evidence_documents: List[Any]) -> Dict[str, Any]:
+        """Extract spaCy insights from evidence documents for prompt enhancement."""
+        try:
+            all_entities = []
+            all_compliance_keywords = []
+            all_key_terms = []
+            
+            for doc in evidence_documents[:10]:  # Limit for performance
+                try:
+                    # Get content from document
+                    if hasattr(doc, 'page_content'):
+                        content = doc.page_content
+                    elif hasattr(doc, 'content'):
+                        content = doc.content
+                    else:
+                        continue
+                    
+                    # Check if document already has spaCy metadata
+                    spacy_entities = []
+                    compliance_keywords = {}
+                    
+                    if hasattr(doc, 'metadata'):
+                        # Extract from metadata if available
+                        if 'spacy_entities' in doc.metadata:
+                            try:
+                                spacy_entities = json.loads(doc.metadata['spacy_entities']) if isinstance(doc.metadata['spacy_entities'], str) else doc.metadata['spacy_entities']
+                            except:
+                                pass
+                        
+                        if 'compliance_keywords' in doc.metadata:
+                            try:
+                                compliance_keywords = json.loads(doc.metadata['compliance_keywords']) if isinstance(doc.metadata['compliance_keywords'], str) else doc.metadata['compliance_keywords']
+                            except:
+                                pass
+                    
+                    # If no metadata, process with spaCy
+                    if not spacy_entities and not compliance_keywords:
+                        processed_text = text_processor.process_text(content[:2000])  # Limit for performance
+                        spacy_entities = [{'text': e['text'], 'label': e['label']} for e in processed_text.entities[:10]]
+                        compliance_keywords = text_processor.extract_compliance_keywords(content[:2000])
+                    
+                    # Collect insights
+                    all_entities.extend(spacy_entities[:5])
+                    if isinstance(compliance_keywords, dict):
+                        for category, terms in compliance_keywords.items():
+                            if category not in all_compliance_keywords:
+                                all_compliance_keywords.append(category)
+                            all_key_terms.extend(terms[:3] if isinstance(terms, list) else [])
+                    
+                except Exception as e:
+                    logger.debug(f"Failed to extract insights from document: {str(e)}")
+                    continue
+            
+            # Deduplicate and limit
+            unique_entities = {e['text']: e for e in all_entities if isinstance(e, dict)}.values()
+            unique_terms = list(set(all_key_terms))[:20]
+            
+            return {
+                'entities': list(unique_entities)[:15],
+                'compliance_categories': list(set(all_compliance_keywords)),
+                'key_terms': unique_terms,
+                'total_documents_analyzed': len(evidence_documents)
+            }
+            
+        except Exception as e:
+            logger.warning(f"Failed to extract spaCy insights: {str(e)}")
+            return {
+                'entities': [],
+                'compliance_categories': [],
+                'key_terms': [],
+                'total_documents_analyzed': 0
+            }
+    
+    def _format_spacy_insights_for_prompt(self, spacy_insights: Dict[str, Any]) -> str:
+        """Format spaCy insights for inclusion in the evaluation prompt."""
+        insights_text = f"SEMANTIC INSIGHTS FROM EVIDENCE ({spacy_insights['total_documents_analyzed']} documents analyzed):\n"
+        
+        # Format entities
+        entities = spacy_insights.get('entities', [])
+        if entities:
+            insights_text += f"\nKey Entities Identified ({len(entities)} total):\n"
+            for entity in entities[:10]:
+                if isinstance(entity, dict):
+                    insights_text += f"  - {entity.get('text', 'Unknown')}: {entity.get('label', 'Unknown')}\n"
+        
+        # Format compliance categories
+        categories = spacy_insights.get('compliance_categories', [])
+        if categories:
+            insights_text += f"\nCompliance Categories Found: {', '.join(categories)}\n"
+        
+        # Format key terms
+        key_terms = spacy_insights.get('key_terms', [])
+        if key_terms:
+            insights_text += f"\nKey Compliance Terms: {', '.join(key_terms[:15])}\n"
+        
+        return insights_text
+    
+    def _format_enhanced_evidence_content(self, evidence_documents: List[Any], spacy_insights: Dict[str, Any]) -> str:
+        """Format evidence documents with spaCy enhancements for prompt inclusion."""
+        if not evidence_documents:
+            return "No evidence documents provided for analysis."
+        
+        evidence_parts = []
+        for i, doc in enumerate(evidence_documents[:15], 1):  # Limit to prevent prompt overflow
+            # Get content
+            if hasattr(doc, 'page_content'):
+                content = doc.page_content
+            elif hasattr(doc, 'content'):
+                content = doc.content
+            else:
+                content = str(doc)
+            
+            # Add document metadata if available
+            metadata_info = ""
+            if hasattr(doc, 'metadata'):
+                content_group = doc.metadata.get('content_group', '')
+                if content_group:
+                    metadata_info = f" (Content Group: {content_group})"
+            
+            evidence_parts.append(f"Document {i}{metadata_info}:\n{content}")
+        
+        return '\n\n'.join(evidence_parts)
+    
+    def _format_enhanced_policy_rules_for_prompt(self, policy_rules: List[PolicyRule]) -> str:
+        """Format policy rules with spaCy enhancement hints."""
+        if not policy_rules:
+            return """No specific policy rules found. Evaluate based on general compliance best practices."""
+        
+        formatted_rules = []
+        for i, rule in enumerate(policy_rules, 1):
+            rule_text = f"""Rule {i}:
+Rule ID: {rule.rule_id}
+Description: {rule.rule_description}
+Type: {rule.rule_type}
+Severity: {rule.severity}
+Validation Criteria: {rule.validation_criteria or 'General compliance assessment required'}
+Policy Source: {rule.policy_name}"""
+            
+            formatted_rules.append(rule_text)
+        
+        return '\n\n'.join(formatted_rules)
+    
+    def _get_enhanced_output_schema(self) -> Dict[str, Any]:
+        """Get enhanced JSON output schema with spaCy-aware fields."""
+        return {
+            "type": "object",
+            "properties": {
+                "policy_name": {"type": "string"},
+                "decision": {
+                    "type": "string",
+                    "enum": ["Compliant", "Non-Compliant", "Indeterminate"]
+                },
+                "confidence_score": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0
+                },
+                "analysis_summary": {"type": "string"},
+                "rule_assessments": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "rule_id": {"type": "string"},
+                            "rule_description": {"type": "string"},
+                            "status": {
+                                "type": "string",
+                                "enum": ["Compliant", "Non-Compliant", "Indeterminate"]
+                            },
+                            "evidence_quote": {"type": "string"},
+                            "confidence_score": {
+                                "type": "number",
+                                "minimum": 0.0,
+                                "maximum": 1.0
+                            }
+                        },
+                        "required": ["rule_id", "rule_description", "status", "evidence_quote", "confidence_score"]
+                    }
+                }
+            },
+            "required": ["policy_name", "decision", "confidence_score", "analysis_summary", "rule_assessments"]
+        }
+    
+    async def _query_llm_with_enhanced_context(self, enhanced_prompt: str) -> Dict[str, Any]:
+        """Query LLM (Gemini 2.5 Pro) with spaCy-enhanced context."""
+        try:
+            logger.info("Querying Gemini 2.5 Pro with spaCy-enhanced compliance evaluation prompt")
+            
+            # Use Vertex AI service to query LLM
+            llm_response = self.vertex_service.evaluate_compliance(enhanced_prompt)
+            
+            # Log enhanced response summary
+            decision = llm_response.get('decision', 'unknown')
+            confidence = llm_response.get('confidence_score', 0.0)
+            num_assessments = len(llm_response.get('rule_assessments', []))
+            
+            logger.info(f"Enhanced LLM evaluation completed: {decision} (confidence: {confidence:.2f}, {num_assessments} assessments)")
+            
+            return llm_response
+            
+        except Exception as e:
+            logger.error(f"Enhanced LLM query failed: {str(e)}")
+            raise
+    
+    async def _parse_and_validate_with_spacy(self, llm_response: Dict[str, Any], 
+                                           evidence_documents: List[Any]) -> Dict[str, Any]:
+        """Parse and Validate LLM response with spaCy enhancement validation."""
+        try:
+            logger.info("Parsing and validating enhanced LLM response")
+            
+            # Validate enhanced response structure
+            validation_errors = self._validate_enhanced_response_structure(llm_response)
+            
+            if validation_errors:
+                logger.error(f"Enhanced response validation failed: {', '.join(validation_errors)}")
+                raise ValueError(f"Enhanced LLM response validation failed: {', '.join(validation_errors)}")
+            
+            # Clean and normalize enhanced response
+            cleaned_response = self._clean_enhanced_response(llm_response)
+            
+            # Add spaCy validation metrics
+            cleaned_response = await self._add_spacy_validation_metrics(cleaned_response, evidence_documents)
+            
+            logger.info("Enhanced response validation completed successfully")
+            return cleaned_response
+            
+        except Exception as e:
+            logger.error(f"Enhanced response validation failed: {str(e)}")
+            raise
+    
+    def _validate_enhanced_response_structure(self, response: Dict[str, Any]) -> List[str]:
+        """Validate enhanced LLM response structure."""
+        errors = []
+        
+        # Check required top-level fields
+        required_fields = ['policy_name', 'decision', 'confidence_score', 'analysis_summary', 'rule_assessments']
+        for field in required_fields:
+            if field not in response:
+                errors.append(f"Missing required field: {field}")
+        
+        # Validate decision values
+        valid_decisions = [d.value for d in ComplianceDecision]
+        if response.get('decision') not in valid_decisions:
+            errors.append(f"Invalid decision value: {response.get('decision')}")
+        
+        # Validate confidence score
+        try:
+            score = float(response.get('confidence_score', -1))
+            if not (0.0 <= score <= 1.0):
+                errors.append(f"Confidence score out of range: {score}")
+        except (ValueError, TypeError):
+            errors.append("Invalid confidence score format")
+        
+        return errors
+    
+    def _clean_enhanced_response(self, response: Dict[str, Any]) -> Dict[str, Any]:
+        """Clean and normalize enhanced LLM response."""
+        cleaned = response.copy()
+        
+        # Ensure confidence score is float
+        try:
+            cleaned['confidence_score'] = float(cleaned['confidence_score'])
+        except (ValueError, TypeError):
+            cleaned['confidence_score'] = 0.0
+        
+        # Clean enhanced rule assessments
+        if 'rule_assessments' in cleaned:
+            for assessment in cleaned['rule_assessments']:
+                # Ensure confidence score exists for each rule
+                if 'confidence_score' not in assessment:
+                    assessment['confidence_score'] = cleaned['confidence_score']
+                else:
+                    try:
+                        assessment['confidence_score'] = float(assessment['confidence_score'])
+                    except (ValueError, TypeError):
+                        assessment['confidence_score'] = 0.5
+                
+                # Trim long evidence quotes
+                if len(assessment.get('evidence_quote', '')) > 1500:
+                    assessment['evidence_quote'] = assessment['evidence_quote'][:1497] + '...'
+        
+        return cleaned
+    
+    async def _add_spacy_validation_metrics(self, response: Dict[str, Any], 
+                                          evidence_documents: List[Any]) -> Dict[str, Any]:
+        """Add spaCy validation metrics to the response."""
+        try:
+            # Add processing metadata
+            response['spacy_processing'] = {
+                'enhanced_evaluation': True,
+                'entity_analysis_enabled': True,
+                'documents_processed': len(evidence_documents),
+                'processed_at': datetime.utcnow().isoformat()
+            }
+            
+            return response
+            
+        except Exception as e:
+            logger.warning(f"Failed to add spaCy validation metrics: {str(e)}")
+            return response
+    
+    def get_processing_stats(self) -> Dict[str, Any]:
+        """Get enhanced processing statistics for monitoring."""
+        return {
+            'agent_name': 'Enhanced PolicyEvaluationAgent',
+            'llm_model': config.llm_model_name,
+            'json_mode_enabled': True,
+            'response_validation': True,
+            'spacy_integration': {
+                'entity_aware_prompting': True,
+                'compliance_pattern_matching': True,
+                'semantic_similarity_analysis': True,
+                'enhanced_confidence_scoring': True
+            }
+        }

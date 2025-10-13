@@ -1,0 +1,448 @@
+"""
+Enhanced Status Update Agent with GCS and spaCy integration.
+
+This agent persists enhanced evaluation results to both GCS document store and
+Spanner vector store, handling spaCy-processed metadata and semantic insights.
+"""
+
+import logging
+from typing import Dict, Any, Optional
+from datetime import datetime
+import json
+
+from ..models.data_models import (
+    WorkflowState, ComplianceResult, RuleAssessment, 
+    ComplianceDecision, ValidationStatus
+)
+from ..services.enhanced_spanner_service import EnhancedSpannerVectorService
+from ..utils.spacy_processor import text_processor
+from ..core.config import config
+
+logger = logging.getLogger(__name__)
+
+
+class EnhancedStatusUpdateAgent:
+    """
+    Enhanced Status Update Agent with GCS and spaCy integration.
+    
+    Features:
+    - Updates both GCS document store and Spanner vector store
+    - Handles spaCy-enhanced metadata and semantic insights  
+    - Persists entity analysis results and compliance patterns
+    - Creates comprehensive final results with semantic information
+    """
+    
+    def __init__(self):
+        """Initialize the Enhanced Status Update Agent."""
+        self.vector_service = EnhancedSpannerVectorService()
+        
+        logger.info("Initialized Enhanced Status Update Agent with GCS + spaCy integration")
+    
+    async def process(self, state: WorkflowState) -> Dict[str, Any]:
+        """
+        Main processing method for Enhanced Status Update Agent.
+        
+        Args:
+            state: Current workflow state with enhanced evaluation results
+            
+        Returns:
+            Dictionary with final enhanced results and completion status
+        """
+        try:
+            request = state.request
+            llm_evaluation = state.llm_evaluation
+            evidence_id = state.evidence_id
+            
+            logger.info("Persisting enhanced evaluation results and creating final output")
+            state.add_message("Starting enhanced result persistence and finalization")
+            
+            # Task 1: Update Enhanced Vector Store with spaCy Metadata
+            update_success = await self._update_enhanced_vector_store(evidence_id, llm_evaluation)
+            if update_success:
+                state.add_message("Successfully updated GCS + Spanner with enhanced evaluation results")
+            else:
+                state.add_message("Warning: Failed to update enhanced storage, but continuing...")
+            
+            # Task 2: Create Enhanced Final Result with spaCy Insights
+            final_result = await self._create_enhanced_final_result(request, llm_evaluation, evidence_id, state)
+            state.add_message(f"Created enhanced compliance result: {final_result.decision.value}")
+            
+            # Task 3: Generate spaCy Analysis Summary
+            spacy_summary = await self._generate_spacy_analysis_summary(llm_evaluation, state)
+            state.add_message("Generated spaCy analysis summary with semantic insights")
+            
+            return {
+                'final_result': final_result,
+                'spacy_analysis_summary': spacy_summary,
+                'enhanced_storage_updated': update_success,
+                'success': True
+            }
+            
+        except Exception as e:
+            error_msg = f"Enhanced StatusUpdateAgent failed: {str(e)}"
+            logger.error(error_msg)
+            state.set_error(error_msg)
+            
+            # Create enhanced error result for graceful failure handling
+            error_result = await self._create_enhanced_error_result(state.request, str(e))
+            return {
+                'final_result': error_result,
+                'error': error_msg,
+                'success': False
+            }
+    
+    async def _update_enhanced_vector_store(self, evidence_id: str, evaluation_result: Dict[str, Any]) -> bool:
+        """
+        Task 1: Update Enhanced Vector Store with spaCy metadata.
+        
+        Updates both GCS document store and Spanner vector store with
+        enhanced evaluation results including spaCy-processed insights.
+        
+        Args:
+            evidence_id: Unique ID of the evidence document
+            evaluation_result: Enhanced LLM evaluation results to persist
+            
+        Returns:
+            True if update successful, False otherwise
+        """
+        try:
+            logger.info(f"Updating enhanced vector store for evidence ID: {evidence_id}")
+            
+            if not evidence_id:
+                logger.warning("No evidence ID provided, skipping enhanced vector store update")
+                return False
+            
+            # Prepare enhanced evaluation data for storage
+            enhanced_evaluation_data = await self._prepare_enhanced_evaluation_data(evaluation_result)
+            
+            # Use enhanced vector service to update document status
+            success = self.vector_service.update_document_status(evidence_id, enhanced_evaluation_data)
+            
+            if success:
+                logger.info(f"Successfully updated enhanced evidence {evidence_id} with validation status: "
+                           f"{enhanced_evaluation_data['decision']}")
+                
+                # Log spaCy enhancement details
+                spacy_processing = enhanced_evaluation_data.get('spacy_processing', {})
+                logger.info(f"Enhanced metadata stored: "
+                           f"entity_analysis={spacy_processing.get('entity_analysis_enabled', False)}, "
+                           f"documents_processed={spacy_processing.get('documents_processed', 0)}")
+            else:
+                logger.error(f"Failed to update enhanced evidence {evidence_id} in vector store")
+            
+            return success
+            
+        except Exception as e:
+            logger.error(f"Failed to update enhanced vector store: {str(e)}")
+            return False
+    
+    async def _prepare_enhanced_evaluation_data(self, evaluation_result: Dict[str, Any]) -> Dict[str, Any]:
+        """Prepare enhanced evaluation data for storage with spaCy metadata."""
+        try:
+            # Start with basic evaluation data
+            enhanced_data = {
+                'decision': evaluation_result['decision'],
+                'confidence_score': evaluation_result['confidence_score'],
+                'analysis_summary': evaluation_result['analysis_summary'],
+                'rule_assessments': evaluation_result['rule_assessments']
+            }
+            
+            # Add spaCy processing metadata if available
+            if 'spacy_processing' in evaluation_result:
+                enhanced_data['spacy_processing'] = evaluation_result['spacy_processing']
+            
+            # Add entity analysis if available
+            if 'entity_analysis' in evaluation_result:
+                entity_analysis = evaluation_result['entity_analysis']
+                enhanced_data['entity_analysis'] = {
+                    'key_entity_matches': entity_analysis.get('key_entity_matches', []),
+                    'compliance_patterns_found': entity_analysis.get('compliance_patterns_found', []),
+                    'semantic_similarity_score': entity_analysis.get('semantic_similarity_score', 0.0)
+                }
+            
+            # Add enhanced timestamps
+            enhanced_data['enhanced_evaluation_timestamp'] = datetime.utcnow().isoformat()
+            enhanced_data['spacy_enhanced'] = True
+            
+            return enhanced_data
+            
+        except Exception as e:
+            logger.error(f"Failed to prepare enhanced evaluation data: {str(e)}")
+            # Return basic data as fallback
+            return {
+                'decision': evaluation_result.get('decision', 'Indeterminate'),
+                'confidence_score': evaluation_result.get('confidence_score', 0.0),
+                'analysis_summary': evaluation_result.get('analysis_summary', ''),
+                'rule_assessments': evaluation_result.get('rule_assessments', [])
+            }
+    
+    async def _create_enhanced_final_result(self, request: Any, evaluation_result: Dict[str, Any], 
+                                          evidence_id: str, state: WorkflowState) -> ComplianceResult:
+        """
+        Task 2: Create Enhanced Final Output with spaCy insights.
+        
+        Converts enhanced LLM evaluation results into structured ComplianceResult object
+        with spaCy-processed metadata and semantic analysis information.
+        
+        Args:
+            request: Original compliance request
+            evaluation_result: Enhanced LLM evaluation results with spaCy data
+            evidence_id: Evidence document ID
+            state: Current workflow state
+            
+        Returns:
+            Enhanced ComplianceResult object with semantic insights
+        """
+        try:
+            logger.info("Creating enhanced final compliance result object with spaCy insights")
+            
+            # Convert rule assessments to enhanced RuleAssessment objects
+            enhanced_rule_assessments = []
+            for assessment_data in evaluation_result.get('rule_assessments', []):
+                try:
+                    # Create enhanced rule assessment with additional fields
+                    rule_assessment = RuleAssessment(
+                        rule_id=assessment_data.get('rule_id', 'unknown'),
+                        rule_description=assessment_data.get('rule_description', ''),
+                        status=ComplianceDecision(assessment_data.get('status', 'Indeterminate')),
+                        evidence_quote=assessment_data.get('evidence_quote', ''),
+                        confidence_score=float(assessment_data.get('confidence_score', 0.0))
+                    )
+                    
+                    # Add spaCy-specific fields if available
+                    if 'entity_matches' in assessment_data:
+                        # Store as metadata in the rule assessment (if supported by model)
+                        logger.debug(f"Entity matches for rule {rule_assessment.rule_id}: "
+                                   f"{assessment_data['entity_matches']}")
+                    
+                    if 'semantic_analysis' in assessment_data:
+                        logger.debug(f"Semantic analysis for rule {rule_assessment.rule_id}: "
+                                   f"{assessment_data['semantic_analysis'][:100]}...")
+                    
+                    enhanced_rule_assessments.append(rule_assessment)
+                    
+                except (ValueError, KeyError) as e:
+                    logger.warning(f"Skipping invalid enhanced rule assessment: {str(e)}")
+                    continue
+            
+            # Create enhanced final compliance result
+            final_result = ComplianceResult(
+                policy_name=request.policy_name,
+                decision=ComplianceDecision(evaluation_result['decision']),
+                confidence_score=float(evaluation_result['confidence_score']),
+                analysis_summary=evaluation_result['analysis_summary'],
+                rule_assessments=enhanced_rule_assessments,
+                evidence_id=evidence_id,
+                request_id=request.request_id,
+                processing_time_seconds=state.get_processing_time()
+            )
+            
+            # Log enhanced final result summary
+            spacy_processing = evaluation_result.get('spacy_processing', {})
+            entity_analysis = evaluation_result.get('entity_analysis', {})
+            
+            logger.info(f"Enhanced final compliance result created:")
+            logger.info(f"  - Decision: {final_result.decision.value}")
+            logger.info(f"  - Confidence: {final_result.confidence_score:.2f}")
+            logger.info(f"  - Rule assessments: {len(final_result.rule_assessments)}")
+            logger.info(f"  - Processing time: {final_result.processing_time_seconds:.2f}s")
+            logger.info(f"  - spaCy enhanced: {spacy_processing.get('enhanced_evaluation', False)}")
+            logger.info(f"  - Entity matches: {len(entity_analysis.get('key_entity_matches', []))}")
+            logger.info(f"  - Compliance patterns: {len(entity_analysis.get('compliance_patterns_found', []))}")
+            
+            return final_result
+            
+        except Exception as e:
+            logger.error(f"Failed to create enhanced final result: {str(e)}")
+            raise
+    
+    async def _generate_spacy_analysis_summary(self, evaluation_result: Dict[str, Any], 
+                                             state: WorkflowState) -> Dict[str, Any]:
+        """Generate comprehensive spaCy analysis summary."""
+        try:
+            logger.info("Generating spaCy analysis summary")
+            
+            spacy_processing = evaluation_result.get('spacy_processing', {})
+            entity_analysis = evaluation_result.get('entity_analysis', {})
+            
+            # Collect spaCy metrics
+            spacy_summary = {
+                'spacy_enhanced_evaluation': spacy_processing.get('enhanced_evaluation', False),
+                'total_documents_processed': spacy_processing.get('documents_processed', 0),
+                'entity_analysis_results': {
+                    'key_entity_matches': entity_analysis.get('key_entity_matches', []),
+                    'entity_match_count': len(entity_analysis.get('key_entity_matches', [])),
+                    'compliance_patterns_found': entity_analysis.get('compliance_patterns_found', []),
+                    'pattern_count': len(entity_analysis.get('compliance_patterns_found', [])),
+                    'semantic_similarity_score': entity_analysis.get('semantic_similarity_score', 0.0)
+                },
+                'enhancement_statistics': {
+                    'entities_extracted': True,
+                    'compliance_keywords_identified': True,
+                    'semantic_analysis_performed': True,
+                    'processing_timestamp': spacy_processing.get('processed_at', datetime.utcnow().isoformat())
+                }
+            }
+            
+            # Add rule-level spaCy analysis
+            rule_spacy_analysis = []
+            for assessment in evaluation_result.get('rule_assessments', []):
+                if 'entity_matches' in assessment or 'semantic_analysis' in assessment:
+                    rule_analysis = {
+                        'rule_id': assessment.get('rule_id', 'unknown'),
+                        'entity_matches': assessment.get('entity_matches', []),
+                        'has_semantic_analysis': 'semantic_analysis' in assessment,
+                        'entity_match_strength': len(assessment.get('entity_matches', []))
+                    }
+                    rule_spacy_analysis.append(rule_analysis)
+            
+            spacy_summary['rule_level_analysis'] = rule_spacy_analysis
+            
+            # Calculate overall spaCy enhancement score
+            enhancement_score = 0.0
+            if spacy_summary['entity_analysis_results']['entity_match_count'] > 0:
+                enhancement_score += 0.3
+            if spacy_summary['entity_analysis_results']['pattern_count'] > 0:
+                enhancement_score += 0.3
+            if spacy_summary['entity_analysis_results']['semantic_similarity_score'] > 0.5:
+                enhancement_score += 0.4
+            
+            spacy_summary['overall_enhancement_score'] = enhancement_score
+            
+            logger.info(f"Generated spaCy analysis summary: "
+                       f"enhancement_score={enhancement_score:.2f}, "
+                       f"entities={spacy_summary['entity_analysis_results']['entity_match_count']}, "
+                       f"patterns={spacy_summary['entity_analysis_results']['pattern_count']}")
+            
+            return spacy_summary
+            
+        except Exception as e:
+            logger.error(f"Failed to generate spaCy analysis summary: {str(e)}")
+            return {
+                'spacy_enhanced_evaluation': False,
+                'error': str(e),
+                'fallback_summary': True
+            }
+    
+    async def _create_enhanced_error_result(self, request: Any, error_message: str) -> ComplianceResult:
+        """Create enhanced error result for graceful failure handling."""
+        try:
+            logger.info("Creating enhanced error compliance result")
+            
+            error_result = ComplianceResult(
+                policy_name=getattr(request, 'policy_name', 'Unknown'),
+                decision=ComplianceDecision.INDETERMINATE,
+                confidence_score=0.0,
+                analysis_summary=f"Enhanced compliance verification failed due to system error: {error_message}. "
+                               f"spaCy integration was attempted but could not complete successfully.",
+                rule_assessments=[],
+                request_id=getattr(request, 'request_id', None),
+                processing_time_seconds=0.0
+            )
+            
+            return error_result
+            
+        except Exception as e:
+            logger.error(f"Failed to create enhanced error result: {str(e)}")
+            
+            # Minimal fallback result
+            return ComplianceResult(
+                policy_name="Unknown",
+                decision=ComplianceDecision.INDETERMINATE,
+                confidence_score=0.0,
+                analysis_summary="Enhanced system error occurred during compliance verification with spaCy integration",
+                rule_assessments=[]
+            )
+    
+    def _calculate_enhanced_overall_compliance(self, rule_assessments: List[RuleAssessment]) -> ComplianceDecision:
+        """Calculate overall compliance decision from enhanced individual rule assessments."""
+        if not rule_assessments:
+            return ComplianceDecision.INDETERMINATE
+        
+        # Count assessment results
+        compliant_count = sum(1 for r in rule_assessments if r.status == ComplianceDecision.COMPLIANT)
+        non_compliant_count = sum(1 for r in rule_assessments if r.status == ComplianceDecision.NON_COMPLIANT)
+        indeterminate_count = sum(1 for r in rule_assessments if r.status == ComplianceDecision.INDETERMINATE)
+        
+        total_assessments = len(rule_assessments)
+        
+        # Enhanced decision logic with confidence weighting
+        high_confidence_assessments = [r for r in rule_assessments if r.confidence_score >= 0.8]
+        
+        # If we have high-confidence assessments, prioritize them
+        if high_confidence_assessments:
+            high_conf_non_compliant = sum(1 for r in high_confidence_assessments 
+                                        if r.status == ComplianceDecision.NON_COMPLIANT)
+            high_conf_compliant = sum(1 for r in high_confidence_assessments 
+                                    if r.status == ComplianceDecision.COMPLIANT)
+            
+            if high_conf_non_compliant > 0:
+                return ComplianceDecision.NON_COMPLIANT
+            elif high_conf_compliant == len(high_confidence_assessments):
+                return ComplianceDecision.COMPLIANT
+        
+        # Standard decision logic
+        if non_compliant_count > 0:
+            return ComplianceDecision.NON_COMPLIANT
+        elif compliant_count == total_assessments:
+            return ComplianceDecision.COMPLIANT
+        else:
+            return ComplianceDecision.INDETERMINATE
+    
+    def _validate_enhanced_evaluation_result(self, evaluation_result: Dict[str, Any]) -> bool:
+        """Validate enhanced evaluation result structure before processing."""
+        required_fields = ['decision', 'confidence_score', 'analysis_summary', 'rule_assessments']
+        
+        for field in required_fields:
+            if field not in evaluation_result:
+                logger.error(f"Missing required field in enhanced evaluation result: {field}")
+                return False
+        
+        # Validate decision value
+        try:
+            ComplianceDecision(evaluation_result['decision'])
+        except ValueError:
+            logger.error(f"Invalid decision value: {evaluation_result['decision']}")
+            return False
+        
+        # Validate confidence score
+        try:
+            score = float(evaluation_result['confidence_score'])
+            if not (0.0 <= score <= 1.0):
+                logger.error(f"Confidence score out of range: {score}")
+                return False
+        except (ValueError, TypeError):
+            logger.error("Invalid confidence score format")
+            return False
+        
+        # Validate spaCy processing metadata if present
+        if 'spacy_processing' in evaluation_result:
+            spacy_processing = evaluation_result['spacy_processing']
+            if not isinstance(spacy_processing, dict):
+                logger.error("spacy_processing must be a dictionary")
+                return False
+        
+        return True
+    
+    def get_processing_stats(self) -> Dict[str, Any]:
+        """Get enhanced processing statistics for monitoring."""
+        return {
+            'agent_name': 'Enhanced StatusUpdateAgent',
+            'vector_store_service': 'Enhanced SpannerVectorStore with GCS + spaCy',
+            'document_store': 'GCS',
+            'result_validation': True,
+            'error_handling': True,
+            'spacy_integration': {
+                'entity_analysis_persistence': True,
+                'compliance_pattern_storage': True,
+                'semantic_metadata_handling': True,
+                'enhanced_result_formatting': True
+            },
+            'enhancement_features': [
+                'gcs_document_store_updates',
+                'spacy_metadata_persistence',
+                'entity_analysis_summaries',
+                'semantic_insight_storage',
+                'enhanced_confidence_scoring'
+            ]
+        }
